@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./styles.module.css";
 import bookingService from "../../services/booking";
+import adminService from "../../services/admin";
 import { timeSlotsArray, monthsArray, daysArray } from "../../constants";
 import basicHelper from "../../helper";
 import {
@@ -44,6 +45,10 @@ const Home = () => {
 
   function isRequiredFieldsFilled() {
     return name && dateDay && dateMonth && timeSlot;
+  }
+
+  function isLoginRequiredFieldsFilled() {
+    return username && password;
   }
 
   // write reset form function here
@@ -96,7 +101,14 @@ const Home = () => {
     } else if (selectedOption === "login") {
       // Perform POST API request to /api/admin/login with the form data
       // console the input values
-      console.log(username, password);
+      if (!isLoginRequiredFieldsFilled()) {
+        return;
+      }
+      const loginServiceResponse = await adminService.loginAdmin(username, password);
+
+      if (loginServiceResponse.success) {
+        // route to admin page/route
+      }
     }
   };
 
@@ -323,7 +335,14 @@ const Home = () => {
         )}
 
         {/* Submit button */}
-        <Button type="submit" disabled={!isRequiredFieldsFilled()}>
+        <Button
+          type="submit"
+          disabled={
+            selectedOption === "book"
+              ? !isRequiredFieldsFilled()
+              : !isLoginRequiredFieldsFilled()
+          }
+        >
           {selectedOption === "book" ? "Request Reservation" : "Login"}
         </Button>
       </Form>

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 class ServiceClass {
   static isFetching = false;
   static isPosting = false;
@@ -12,8 +14,8 @@ class ServiceClass {
       }
       this.isFetching = true;
 
-      const response = await fetch(url);
-      const data = await response.json();
+      const response = await axios.get(url);
+      const data = response.data;
 
       this.isFetching = false;
       console.log(data);
@@ -33,14 +35,17 @@ class ServiceClass {
         return;
       }
       this.isPosting = true;
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-      const data = await response.json();
+      const response = await axios.post(
+        url,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = response.data;
       this.isPosting = false;
       return data;
     } catch (error) {
