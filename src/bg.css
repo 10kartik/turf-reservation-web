@@ -1,0 +1,39 @@
+/* LoginForm.css */
+.login-container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.background-image {
+  background-image: url('./homeBg.jpg');
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+}
+
+.translucent-rectangle {
+  background-color: rgba(109, 103, 103, 0.912);
+  position: CENTER;
+  top: 0;
+  left: 0;
+  height: 90%;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  width: 500px;
+  background-color: rgb(173, 165, 165);
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1;
+}
