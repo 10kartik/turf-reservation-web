@@ -11,9 +11,6 @@ class AdminService {
       password,
     });
 
-    if (response.status) {
-      // Print cookie
-    }
     return response;
   }
 
@@ -21,6 +18,19 @@ class AdminService {
     const url = constants.coreConstantsObj.apiDomain + `/api/admin/current`;
 
     return await ServiceClass.getEndpoint(url);
+  }
+
+  async getPendingBookings() {
+    const url = constants.coreConstantsObj.apiDomain + `/api/admin/bookings`;
+
+    return await ServiceClass.getEndpoint(url);
+  }
+
+  async confirmBooking(bookingId) {
+    const url =
+      constants.coreConstantsObj.apiDomain + `/api/admin/bookings/${bookingId}/confirm`;
+
+    return await ServiceClass.putEndpoint(url);
   }
 }
 

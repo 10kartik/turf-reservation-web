@@ -17,7 +17,7 @@ import {
 } from "reactstrap";
 import { ProgressBar } from "react-loader-spinner";
 
-const Home = () => {
+const Home = ({ setcurrentAdminEntity }) => {
   const [selectedOption, setSelectedOption] = useState("book");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -34,6 +34,7 @@ const Home = () => {
   const [bookingId, setBookingId] = useState(null);
   const [modal, setModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [bookingInfo, setBookingInfo] = useState(null);
 
   const toggleModal = () => setModal(!modal);
 
@@ -52,6 +53,25 @@ const Home = () => {
   function isLoginRequiredFieldsFilled() {
     return username && password;
   }
+
+  const checkBookingStatus = async () => {
+    if (!bookingId) {
+      window.alert("Please enter a Booking ID");
+      return;
+    }
+
+    setIsLoading(true);
+
+    const bookingInfoResponse = await bookingService.getBookingInfo(bookingId);
+
+    setIsLoading(false);
+
+    if (bookingInfoResponse.success) {
+      setBookingInfo(bookingInfoResponse.data.booking);
+    } else {
+      window.alert("Unable to fetch booking information. Please try again.");
+    }
+  };
 
   // write reset form function here
   function resetForm() {
@@ -117,8 +137,7 @@ const Home = () => {
         // trigger /current route to check if user is logged in
         const currentServiceResponse = await adminService.getCurrentAdmin();
         if (currentServiceResponse.success) {
-          // set current admin info and redirect to /admin route in react
-          
+          setcurrentAdminEntity(currentServiceResponse.data);
         }
       }
     }
@@ -206,6 +225,17 @@ const Home = () => {
             onClick={() => handleOptionChange("login")}
           >
             Login
+          </Button>
+          <Button
+            style={{
+              margin: "0 10px",
+              backgroundColor:
+                selectedOption === "check" ? "blue" : "transparent",
+              color: selectedOption === "check" ? "white" : "black",
+            }}
+            onClick={() => handleOptionChange("check")}
+          >
+            Check Booking Status
           </Button>
         </div>
 
@@ -366,17 +396,62 @@ const Home = () => {
           </div>
         )}
 
+        {selectedOption === "check" && (
+          <div>
+            <FormGroup>
+              <Label for="bookingId">
+                Booking ID<span>*</span>:
+              </Label>
+              <Input
+                type="text"
+                value={bookingId}
+                onChange={(e) => setBookingId(e.target.value)}
+              />
+            </FormGroup>
+            <Button type="button" onClick={checkBookingStatus}>
+              Check Booking Status
+            </Button>
+            {bookingInfo &&
+              (bookingInfo.guest_name ? (
+                <div className="card">
+                  <div className="card-body">
+                    <h3 className="card-title text-center">
+                      Booking Information
+                    </h3>
+                    <p className="card-text">
+                      <strong>Name:</strong> {bookingInfo.guest_name}
+                    </p>
+                    <p className="card-text">
+                      <strong>Status:</strong>{" "}
+                      {bookingInfo.status === "CONFIRMED" ? (
+                        <span className="text-success">✅ Confirmed</span>
+                      ) : (
+                        <span className="text-warning">⏳ Pending</span>
+                      )}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="alert alert-warning" role="alert">
+                  No booking details found
+                </div>
+              ))}
+          </div>
+        )}
+
         {/* Submit button */}
-        <Button
-          type="submit"
-          disabled={
-            selectedOption === "book"
-              ? !isRequiredFieldsFilled()
-              : !isLoginRequiredFieldsFilled()
-          }
-        >
-          {selectedOption === "book" ? "Request Reservation" : "Login"}
-        </Button>
+        {selectedOption !== "check" && (
+          <Button
+            type="submit"
+            disabled={
+              selectedOption === "book"
+                ? !isRequiredFieldsFilled()
+                : !isLoginRequiredFieldsFilled()
+            }
+          >
+            {selectedOption === "book" ? "Request Reservation" : "Login"}
+          </Button>
+        )}
       </Form>
     </div>
   );

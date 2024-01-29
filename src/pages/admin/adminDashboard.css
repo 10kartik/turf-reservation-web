@@ -1,0 +1,9 @@
+.scrollable-container {
+  height: 100vh;
+  overflow-y: auto;
+  max-width: 90%;
+}
+
+.confirm-button {
+  margin-top: 10px;
+}

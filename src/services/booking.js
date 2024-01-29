@@ -19,7 +19,7 @@ class BookingService {
       guest_name: bookingDetails.name,
       guest_phone: bookingDetails.phone,
       guest_email: bookingDetails.email,
-      sports: bookingDetails.sport,
+      sport: bookingDetails.sport,
       attendees: bookingDetails.players,
       booking_date: `${new Date().getFullYear()}-${bookingDetails.dateMonth}-${
         bookingDetails.dateDay
@@ -29,6 +29,13 @@ class BookingService {
     };
 
     return await ServiceClass.postEndpoint(url, bookingDetails);
+  }
+
+  async getBookingInfo(bookingId) {
+    const url =
+      constants.coreConstantsObj.apiDomain + `/api/bookings/${bookingId}`;
+
+    return await ServiceClass.getEndpoint(url);
   }
 }
 

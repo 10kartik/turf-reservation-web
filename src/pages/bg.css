@@ -9,7 +9,7 @@
 }
 
 .background-image {
-  background-image: url('../../homeBg.jpg');
+  background-image: url('../homeBg.jpg');
   background-size: cover;
   background-position: center;
   position: absolute;
@@ -36,4 +36,13 @@
   padding: 20px;
   border-radius: 10px;
   z-index: 1;
+}
+
+.admin-container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }

@@ -62,6 +62,32 @@ class ServiceClass {
       throw new Error(error.message);
     }
   }
+
+  static async putEndpoint(url, body) {
+    try {
+      if (!url) {
+        throw new Error("URL is required");
+      }
+      if (this.isPosting) {
+        return;
+      }
+      this.isPosting = true;
+      const response = await axios.put(url, body, {
+        jar: cookieJar,
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = response.data;
+      this.isPosting = false;
+      return data;
+    } catch (error) {
+      this.isPosting = false;
+      throw new Error(error.message);
+    }
+  }
 }
 
 export default ServiceClass;
