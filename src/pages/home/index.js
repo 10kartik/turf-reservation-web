@@ -3,6 +3,7 @@ import "./styles.module.css";
 import bookingService from "../../services/booking";
 import { timeSlotsArray, monthsArray, daysArray } from "../../constants";
 import basicHelper from "../../helper";
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 
 const Home = () => {
   const [selectedOption, setSelectedOption] = useState("book");
@@ -17,6 +18,7 @@ const Home = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [availableSlots, setAvailableSlots] = useState([]);
+  const [isSlotAvailable, setIsSlotAvailable] = useState(false);
 
   const handleOptionChange = (option) => {
     setSelectedOption(option);
@@ -46,37 +48,36 @@ const Home = () => {
 
   // check slot availability
   const checkAvailability = async () => {
-    // console the input values
-    console.log(dateDay, dateMonth);
-
+    if (!dateDay || !dateMonth) {
+      return;
+    }
     const serviceResponse = await bookingService.getBookingDetails(
       `${dateDay}-${dateMonth}-${new Date().getFullYear()}`
     );
 
-    console.log(serviceResponse);
-
     const bookedSlots = basicHelper.generateSlots(serviceResponse.data);
-
-    // console the booked slots
-    console.log("booked", bookedSlots);
 
     // filter the available slots
     const updatedAvailableSlots = timeSlotsArray.filter(
       (slot) => !bookedSlots.includes(slot)
     );
 
-    console.log("available", updatedAvailableSlots);
+    if (updatedAvailableSlots.length === 0) {
+      window.alert("No slots available for the selected date");
+      setIsSlotAvailable(false);
+    }
 
+    setIsSlotAvailable(true);
     setAvailableSlots(updatedAvailableSlots);
   };
 
   return (
     <div>
       {/* Form */}
-      <form onSubmit={handleFormSubmit}>
+      <Form onSubmit={handleFormSubmit}>
         {/* Options */}
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <button
+        <div className="d-flex justify-content-center">
+          <Button
             style={{
               margin: "0 10px",
               backgroundColor:
@@ -86,8 +87,8 @@ const Home = () => {
             onClick={() => handleOptionChange("book")}
           >
             Book
-          </button>
-          <button
+          </Button>
+          <Button
             style={{
               margin: "0 10px",
               backgroundColor:
@@ -97,18 +98,19 @@ const Home = () => {
             onClick={() => handleOptionChange("login")}
           >
             Login
-          </button>
+          </Button>
         </div>
 
         {/* Book form fields */}
         {selectedOption === "book" && (
           <div>
-            <div className="form-field">
-              <label>
+            <FormGroup>
+              <Label for="date">
                 Date<span>*</span>:
-              </label>
+              </Label>
               <div style={{ display: "flex" }}>
-                <select
+                <Input
+                  type="select"
                   value={dateDay}
                   onChange={(e) => setDateDay(e.target.value)}
                   required
@@ -119,8 +121,9 @@ const Home = () => {
                       {day}
                     </option>
                   ))}
-                </select>
-                <select
+                </Input>
+                <Input
+                  type="select"
                   value={dateMonth}
                   onChange={(e) => setDateMonth(e.target.value)}
                   required
@@ -131,49 +134,59 @@ const Home = () => {
                       {month}
                     </option>
                   ))}
-                </select>
+                </Input>
                 {/* add button "check availability" here */}
-                <button type="button" onClick={checkAvailability}>
-                  Check Availability
-                </button>
+                <div className="d-flex align-items-center mt-2">
+                  {!isSlotAvailable ? (
+                    <Button type="button" onClick={checkAvailability}>
+                      Check Availability
+                    </Button>
+                  ) : (
+                    <div className="text-success font-weight-bold">
+                      ✅ Slots available
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="form-field">
-              <label>
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="name">
                 Name<span>*</span>:
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
               />
-            </div>
+            </FormGroup>
 
-            <div className="form-field">
-              <label>Phone:</label>
-              <input
+            <FormGroup>
+              <Label for="phone">Phone:</Label>
+              <Input
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
               />
-            </div>
+            </FormGroup>
 
-            <div className="form-field">
-              <label>
+            <FormGroup>
+              <Label for="email">
                 Email<span>*</span>:
-              </label>
-              <input
+              </Label>
+              <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-            </div>
+            </FormGroup>
 
-            <div className="form-field">
-              <label>Time Slot:</label>
-              <select
+            <FormGroup>
+              <Label for="timeSlot">Time Slot:</Label>
+              <Input
+                type="select"
                 value={timeSlot}
                 onChange={(e) => setTimeSlot(e.target.value)}
               >
@@ -183,63 +196,63 @@ const Home = () => {
                     {slot}
                   </option>
                 ))}
-              </select>
-            </div>
+              </Input>
+            </FormGroup>
 
-            <div className="form-field">
-              <label>Sport:</label>
-              <input
+            <FormGroup>
+              <Label for="sport">Sport:</Label>
+              <Input
                 type="text"
                 value={sport}
                 onChange={(e) => setSport(e.target.value)}
               />
-            </div>
+            </FormGroup>
 
-            <div className="form-field">
-              <label>Players:</label>
-              <input
+            <FormGroup>
+              <Label for="players">Players:</Label>
+              <Input
                 type="number"
                 value={players}
                 onChange={(e) => setPlayers(e.target.value)}
               />
-            </div>
+            </FormGroup>
           </div>
         )}
 
         {/* Login form fields */}
         {selectedOption === "login" && (
           <div>
-            <div className="form-field">
-              <label>
+            <FormGroup>
+              <Label for="username">
                 Username<span>*</span>:
-              </label>
-              <input
+              </Label>
+              <Input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
-            </div>
+            </FormGroup>
 
-            <div className="form-field">
-              <label>
+            <FormGroup>
+              <Label for="password">
                 Password<span>*</span>:
-              </label>
-              <input
+              </Label>
+              <Input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-            </div>
+            </FormGroup>
           </div>
         )}
 
         {/* Submit button */}
-        <button type="submit">
+        <Button type="submit">
           {selectedOption === "book" ? "Request Reservation" : "Login"}
-        </button>
-      </form>
+        </Button>
+      </Form>
     </div>
   );
 };

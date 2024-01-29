@@ -13,7 +13,6 @@ class ServiceClass {
       this.isFetching = true;
 
       const response = await fetch(url);
-      console.log("response=", response);
       const data = await response.json();
 
       this.isFetching = false;

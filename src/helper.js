@@ -2,6 +2,10 @@ class BasicHelper {
   generateSlots(data) {
     const slotsSet = new Set();
 
+    if (!data || !data.booking_by_date) {
+      return [];
+    }
+
     // Iterate over the booking data and extract start_time and end_time
     for (const bookingDate in data.booking_by_date) {
       const bookings = data.booking_by_date[bookingDate];
