@@ -15,6 +15,19 @@ class BookingService {
 
   async sendBookingDetails(bookingDetails) {
     const url = constants.coreConstantsObj.apiDomain + `/api/bookings`;
+    bookingDetails = {
+      guest_name: bookingDetails.name,
+      guest_phone: bookingDetails.phone,
+      guest_email: bookingDetails.email,
+      sports: bookingDetails.sport,
+      attendees: bookingDetails.players,
+      booking_date: `${new Date().getFullYear()}-${bookingDetails.dateMonth}-${
+        bookingDetails.dateDay
+      }`,
+      start_time: bookingDetails.timeSlot.split("-")[0],
+      end_time: bookingDetails.timeSlot.split("-")[1],
+    };
+
     return await ServiceClass.postEndpoint(url, bookingDetails);
   }
 }

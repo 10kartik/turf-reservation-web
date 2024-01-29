@@ -3,7 +3,17 @@ import "./styles.module.css";
 import bookingService from "../../services/booking";
 import { timeSlotsArray, monthsArray, daysArray } from "../../constants";
 import basicHelper from "../../helper";
-import { Button, Form, FormGroup, Label, Input } from "reactstrap";
+import {
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "reactstrap";
 
 const Home = () => {
   const [selectedOption, setSelectedOption] = useState("book");
@@ -19,17 +29,50 @@ const Home = () => {
   const [password, setPassword] = useState("");
   const [availableSlots, setAvailableSlots] = useState([]);
   const [isSlotAvailable, setIsSlotAvailable] = useState(false);
+  const [bookingId, setBookingId] = useState(null);
+  const [modal, setModal] = useState(false);
+
+  const toggleModal = () => setModal(!modal);
 
   const handleOptionChange = (option) => {
     setSelectedOption(option);
   };
 
-  const handleFormSubmit = (e) => {
+  function isDateEntered() {
+    return dateDay && dateMonth;
+  }
+
+  function isRequiredFieldsFilled() {
+    return name && dateDay && dateMonth && timeSlot;
+  }
+
+  // write reset form function here
+  function resetForm() {
+    setName("");
+    setPhone("");
+    setEmail("");
+    setDateDay("");
+    setDateMonth("");
+    setTimeSlot("");
+    setSport("");
+    setPlayers("");
+    setUsername("");
+    setPassword("");
+    setAvailableSlots([]);
+    setIsSlotAvailable(false);
+  }
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (selectedOption === "book") {
       // Perform POST API request to /api/bookings with the form data
       // console the input values
-      console.log(
+
+      if (!isRequiredFieldsFilled()) {
+        return;
+      }
+
+      const serviceResponse = await bookingService.sendBookingDetails({
         name,
         phone,
         email,
@@ -37,8 +80,19 @@ const Home = () => {
         dateMonth,
         timeSlot,
         sport,
-        players
-      );
+        players,
+      });
+
+      console.log(serviceResponse);
+
+      if (serviceResponse.success) {
+        // Show modal with success message
+        setBookingId(serviceResponse.data.booking_id);
+        toggleModal();
+
+        // reset the form
+        resetForm();
+      }
     } else if (selectedOption === "login") {
       // Perform POST API request to /api/admin/login with the form data
       // console the input values
@@ -48,11 +102,11 @@ const Home = () => {
 
   // check slot availability
   const checkAvailability = async () => {
-    if (!dateDay || !dateMonth) {
+    if (!isDateEntered()) {
       return;
     }
     const serviceResponse = await bookingService.getBookingDetails(
-      `${dateDay}-${dateMonth}-${new Date().getFullYear()}`
+      `${new Date().getFullYear()}-${dateMonth}-${dateDay}`
     );
 
     const bookedSlots = basicHelper.generateSlots(serviceResponse.data);
@@ -73,6 +127,16 @@ const Home = () => {
 
   return (
     <div>
+      <Modal isOpen={modal} toggle={toggleModal}>
+        <ModalHeader toggle={toggleModal}>Booking Status</ModalHeader>
+        <ModalBody>Your booking was successful!</ModalBody>
+        <ModalBody>Copy Booking ID: {bookingId}</ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={toggleModal}>
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
       {/* Form */}
       <Form onSubmit={handleFormSubmit}>
         {/* Options */}
@@ -112,7 +176,10 @@ const Home = () => {
                 <Input
                   type="select"
                   value={dateDay}
-                  onChange={(e) => setDateDay(e.target.value)}
+                  onChange={(e) => {
+                    setDateDay(e.target.value);
+                    setIsSlotAvailable(false);
+                  }}
                   required
                 >
                   <option value="">Day</option>
@@ -125,7 +192,10 @@ const Home = () => {
                 <Input
                   type="select"
                   value={dateMonth}
-                  onChange={(e) => setDateMonth(e.target.value)}
+                  onChange={(e) => {
+                    setDateMonth(e.target.value);
+                    setIsSlotAvailable(false);
+                  }}
                   required
                 >
                   <option value="">Month</option>
@@ -138,7 +208,11 @@ const Home = () => {
                 {/* add button "check availability" here */}
                 <div className="d-flex align-items-center mt-2">
                   {!isSlotAvailable ? (
-                    <Button type="button" onClick={checkAvailability}>
+                    <Button
+                      type="button"
+                      onClick={checkAvailability}
+                      disabled={!isDateEntered()}
+                    >
                       Check Availability
                     </Button>
                   ) : (
@@ -172,23 +246,23 @@ const Home = () => {
             </FormGroup>
 
             <FormGroup>
-              <Label for="email">
-                Email<span>*</span>:
-              </Label>
+              <Label for="email">Email:</Label>
               <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
             </FormGroup>
 
             <FormGroup>
-              <Label for="timeSlot">Time Slot:</Label>
+              <Label for="timeSlot">
+                Time Slot<span>*</span>:
+              </Label>
               <Input
                 type="select"
                 value={timeSlot}
                 onChange={(e) => setTimeSlot(e.target.value)}
+                required
               >
                 <option value="">Select a time slot</option>
                 {availableSlots.map((slot) => (
@@ -249,7 +323,7 @@ const Home = () => {
         )}
 
         {/* Submit button */}
-        <Button type="submit">
+        <Button type="submit" disabled={!isRequiredFieldsFilled()}>
           {selectedOption === "book" ? "Request Reservation" : "Login"}
         </Button>
       </Form>
