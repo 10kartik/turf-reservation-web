@@ -9,7 +9,7 @@
 }
 
 .background-image {
-  background-image: url('./homeBg.jpg');
+  background-image: url('../../homeBg.jpg');
   background-size: cover;
   background-position: center;
   position: absolute;

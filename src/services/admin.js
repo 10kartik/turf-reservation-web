@@ -16,6 +16,12 @@ class AdminService {
     }
     return response;
   }
+
+  async getCurrentAdmin() {
+    const url = constants.coreConstantsObj.apiDomain + `/api/admin/current`;
+
+    return await ServiceClass.getEndpoint(url);
+  }
 }
 
 const adminService = new AdminService();

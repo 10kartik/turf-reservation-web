@@ -1,7 +1,7 @@
 // LoginForm.js
 import React from "react";
 import "./bg.css";
-import Home from "./pages/home/index.js";
+import Home from "./index.js";
 
 const LoginForm = () => {
   return (

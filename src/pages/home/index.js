@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./styles.module.css";
 import bookingService from "../../services/booking";
 import adminService from "../../services/admin";
-import { timeSlotsArray, monthsArray, daysArray } from "../../constants";
 import basicHelper from "../../helper";
+import { timeSlotsArray, monthsArray, daysArray } from "../../constants";
 import {
   Button,
   Form,
@@ -15,6 +15,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "reactstrap";
+import { ProgressBar } from "react-loader-spinner";
 
 const Home = () => {
   const [selectedOption, setSelectedOption] = useState("book");
@@ -32,6 +33,7 @@ const Home = () => {
   const [isSlotAvailable, setIsSlotAvailable] = useState(false);
   const [bookingId, setBookingId] = useState(null);
   const [modal, setModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleModal = () => setModal(!modal);
 
@@ -77,6 +79,8 @@ const Home = () => {
         return;
       }
 
+      setIsLoading(true);
+
       const serviceResponse = await bookingService.sendBookingDetails({
         name,
         phone,
@@ -87,9 +91,7 @@ const Home = () => {
         sport,
         players,
       });
-
-      console.log(serviceResponse);
-
+      setIsLoading(false);
       if (serviceResponse.success) {
         // Show modal with success message
         setBookingId(serviceResponse.data.booking_id);
@@ -104,10 +106,20 @@ const Home = () => {
       if (!isLoginRequiredFieldsFilled()) {
         return;
       }
-      const loginServiceResponse = await adminService.loginAdmin(username, password);
+      setIsLoading(true);
+      const loginServiceResponse = await adminService.loginAdmin(
+        username,
+        password
+      );
 
+      setIsLoading(false);
       if (loginServiceResponse.success) {
-        // route to admin page/route
+        // trigger /current route to check if user is logged in
+        const currentServiceResponse = await adminService.getCurrentAdmin();
+        if (currentServiceResponse.success) {
+          // set current admin info and redirect to /admin route in react
+          
+        }
       }
     }
   };
@@ -117,6 +129,8 @@ const Home = () => {
     if (!isDateEntered()) {
       return;
     }
+    setIsLoading(true);
+
     const serviceResponse = await bookingService.getBookingDetails(
       `${new Date().getFullYear()}-${dateMonth}-${dateDay}`
     );
@@ -129,16 +143,34 @@ const Home = () => {
     );
 
     if (updatedAvailableSlots.length === 0) {
+      setIsLoading(false);
       window.alert("No slots available for the selected date");
       setIsSlotAvailable(false);
     }
 
+    setIsLoading(false);
     setIsSlotAvailable(true);
     setAvailableSlots(updatedAvailableSlots);
   };
 
   return (
     <div>
+      {isLoading && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+          }}
+        >
+          <ProgressBar color="#00BFFF" height={100} width={100} />
+        </div>
+      )}
       <Modal isOpen={modal} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}>Booking Status</ModalHeader>
         <ModalBody>Your booking was successful!</ModalBody>

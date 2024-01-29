@@ -1,4 +1,9 @@
 import axios from "axios";
+import tough from "tough-cookie";
+import { wrapper as axiosCookieJarSupport } from "axios-cookiejar-support";
+
+axiosCookieJarSupport(axios);
+const cookieJar = new tough.CookieJar();
 
 class ServiceClass {
   static isFetching = false;
@@ -14,7 +19,13 @@ class ServiceClass {
       }
       this.isFetching = true;
 
-      const response = await axios.get(url);
+      const response = await axios.get(url, {
+        jar: cookieJar,
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const data = response.data;
 
       this.isFetching = false;
@@ -35,15 +46,13 @@ class ServiceClass {
         return;
       }
       this.isPosting = true;
-      const response = await axios.post(
-        url,
-        body,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.post(url, body, {
+        jar: cookieJar,
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       const data = response.data;
       this.isPosting = false;
