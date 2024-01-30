@@ -9,7 +9,7 @@
 }
 
 .background-image {
-  background-image: url('./homeBg.jpg');
+  background-image: url('../homeBg.jpg');
   background-size: cover;
   background-position: center;
   position: absolute;
@@ -32,8 +32,17 @@
 
 .form-container {
   width: 500px;
-  background-color: rgb(173, 165, 165);
+  background-color: rgb(208, 209, 212);
   padding: 20px;
   border-radius: 10px;
   z-index: 1;
+}
+
+.admin-container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }

@@ -1,70 +1,63 @@
-# Getting Started with Create React App
+# Turf Reservation System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a turf reservation system. The web frontend uses tech tools like React, CSS, Bootstrap, and Axios.
 
-## Available Scripts
+## User Stories
 
-In the project directory, you can run:
+### As a Guest User
 
-### `npm start`
+#### View Available Slots
+Visitors can access the website to view the available time slots for booking. The system displays a list of available slots.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+#### Book a Slot
+Users can select their desired time slot for booking and proceed to the booking form.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+#### Provide Booking Information
+Guests need to enter basic information (name, phone, email) to confirm the booking.
 
-### `npm test`
+![Available and Book Slots](./public/check_and_book.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### Confirm Booking
+Users have the ability to review the booking details and confirm the booking.
 
-### `npm run build`
+![Reservation request confirmed](./public/booking_request_confirmed.png)
+![Check Reservation Status](./public/status_pending.png)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### As an Admin User
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### View Bookings
+Admins can log in to the admin panel and view the list of pending bookings.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+![Admin login panel](./public/admin_login.png)
 
-### `npm run eject`
+#### Confirm Reservation as Booked
+After confirming payment, admins can mark the booking as booked.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+![Admin login panel](./public/confirm_pending_bookings.png)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### Check booking status
+Guest or Admin can check and verify booking status.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+![Booking confirmed](./public/booking_confirmed.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Getting Started
 
-## Learn More
+Before you begin, ensure that you have forked and set up the backend repository, which is running successfully. You can find the backend repository at the following link: [Turf Reservation API](https://github.com/10kartik/turf-reservation-api).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Follow these steps to set up this repository:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. **Fork the Repository:** Start by forking this repository to your own GitHub account.
 
-### Code Splitting
+2. **Clone the Repository:** After forking, clone the repository to your local machine by using the `git clone` command.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+3. **Install Dependencies:** Navigate to the cloned repository's directory and run `npm install` to install all the necessary dependencies.
 
-### Analyzing the Bundle Size
+4. **Set Environment Variables:** Create a `.env` file in the root directory of the project and set all the required environment variables.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+5. **Start the Server:** Run `npm start` to start the server. The application should now be running at `localhost:3000`.
 
-### Making a Progressive Web App
+6. **Make Changes:** After you've made your changes, commit and push them to your forked repository.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+7. **Deploy the Application:** To deploy the application, type `vercel` in your terminal to create a preview deployment. Once you're ready to push your changes live, use `vercel --prod` to create a production deployment.
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+That's it! You've now successfully set up and deployed the application.
