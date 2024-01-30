@@ -85,7 +85,7 @@ const AdminDashboard = () => {
                       )}
                       {booking.sport && (
                         <Col md={2}>
-                          <strong>Sport:</strong> {booking.sports}
+                          <strong>Sport:</strong> {booking.sport}
                         </Col>
                       )}
                       {booking.attendees && (
