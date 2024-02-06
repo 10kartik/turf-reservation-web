@@ -29,7 +29,6 @@ class ServiceClass {
       const data = response.data;
 
       this.isFetching = false;
-      console.log(data);
       return data;
     } catch (error) {
       this.isFetching = false;

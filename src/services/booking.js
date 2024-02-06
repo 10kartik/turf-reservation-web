@@ -3,13 +3,9 @@ import constants from "../constants";
 
 class BookingService {
   async getBookingDetails(date) {
-    console.log(
-      "coreConstants.apiDomain",
-      constants.coreConstantsObj.apiDomain
-    );
+    console.log("API Domain=>", constants.coreConstantsObj.apiDomain);
     const url =
       constants.coreConstantsObj.apiDomain + `/api/bookings?date=${date}`;
-    console.log(url);
     return await ServiceClass.getEndpoint(url);
   }
 
