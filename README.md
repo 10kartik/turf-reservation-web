@@ -2,6 +2,8 @@
 
 This project is a turf reservation system. The web frontend uses tech tools like React, CSS, Bootstrap, and Axios.
 
+Make sure to checkout [backend repository](https://github.com/10kartik/turf-reservation-api).
+
 ## User Stories
 
 ### As a Guest User
