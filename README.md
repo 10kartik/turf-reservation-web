@@ -1,3 +1,4 @@
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2F10kartik%2Fturf-reservation-web&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23B81C1C&title=visits&edge_flat=false)](https://hits.seeyoufarm.com)
 # Turf Reservation System
 
 This project is a turf reservation system. The web frontend uses tech tools like React, CSS, Bootstrap, and Axios.
